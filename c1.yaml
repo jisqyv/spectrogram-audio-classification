@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: c1
+  labels:
+    app: c1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: c1
+  template:
+    metadata:
+      labels:
+        app: c1
+    spec:
+      containers:
+      - name: c1
+        image: 10.2.71.26:5000/pac
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+        command:
+        - /docker-entry.sh
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: c1
+spec:
+  type: ClusterIP
+  selector:
+    app: c1
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http
